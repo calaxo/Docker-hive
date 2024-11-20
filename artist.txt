@@ -1,0 +1,15 @@
+1,101,leonardo-de-vinchi,Renaissance,2024-11-20 12:00:00,2024-11-20 12:00:00
+2,102,pablo-picasso,Cubism,2024-11-20 12:00:00,2024-11-20 12:00:00
+3,103,vincent-van-gogh,Post-Impressionism,2024-11-20 12:00:00,2024-11-20 12:00:00
+4,104,frida-kahlo,Surrealism,2024-11-20 12:00:00,2024-11-20 12:00:00
+5,105,salvador-dali,Surrealism,2024-11-20 12:00:00,2024-11-20 12:00:00
+6,106,claude-monet,Impressionism,2024-11-20 12:00:00,2024-11-20 12:00:00
+7,107,andy-warhol,Pop Art,2024-11-20 12:00:00,2024-11-20 12:00:00
+8,108,rembrandt,Baroque,2024-11-20 12:00:00,2024-11-20 12:00:00
+9,109,georgia-okeeffe,Modernism,2024-11-20 12:00:00,2024-11-20 12:00:00
+10,110,jackson-pollock,Abstract Expressionism,2024-11-20 12:00:00,2024-11-20 12:00:00
+11,111,henri-matisse,Fauvism,2024-11-20 12:00:00,2024-11-20 12:00:00
+12,112,edvard-munch,Symbolism,2024-11-20 12:00:00,2024-11-20 12:00:00
+13,113,raphael,Renaissance,2024-11-20 12:00:00,2024-11-20 12:00:00
+14,114,diego-rivera,Muralism,2024-11-20 12:00:00,2024-11-20 12:00:00
+15,115,keith-haring,Graffiti Art,2024-11-20 12:00:00,2024-11-20 12:00:00

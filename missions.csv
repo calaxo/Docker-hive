@@ -1,0 +1,6 @@
+mission_id,demon_slayer_id,mission_type,location,mission_status,description
+1,1,Battle,Mount Fuji,Completed,Defeat the Lower Demon causing havoc in the town
+2,2,Rescue,Town of Zenitsu,Completed,Rescue civilians from Upper Demon attack
+3,3,Recon,Forest of Tanjiro,Pending,Investigate the demon sightings in the forest
+4,4,Battle,City of Nezuko,Completed,Eliminate the Mid Demon responsible for attacks on citizens
+5,5,Recon,Underground Cave,Failed,Failed to locate High Demon in the area
