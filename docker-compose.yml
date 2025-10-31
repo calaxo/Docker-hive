@@ -1,8 +1,9 @@
-version: "3"
 
 services:
   namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    container_name: namenode
+    hostname: namenode
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.1.3-java8
     volumes:
       - namenode:/hadoop/dfs/name
     environment:
@@ -10,18 +11,84 @@ services:
     env_file:
       - ./hadoop-hive.env
     ports:
-      - "50070:50070"
-  datanode:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+      - "9870:9870"
+      - "8020:8020"
+
+  datanode1:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.1.3-java8
+    container_name: datanode1
+    hostname: datanode1
     volumes:
-      - datanode:/hadoop/dfs/data
+      - datanode1:/hadoop/dfs/data
     env_file:
       - ./hadoop-hive.env
     environment:
-      SERVICE_PRECONDITION: "namenode:50070"
+      SERVICE_PRECONDITION: "namenode:8020"
+      CORE_CONF_fs_defaultFS : "hdfs://namenode:8020"
+      HDFS_CONF_dfs_datanode_hostname : "datanode1"
+      HDFS_CONF_dfs_client_use_datanode_hostname : "true"
     ports:
       - "50075:50075"
+      - "9864:9864"
+
+  datanode2:
+    container_name: datanode2
+    hostname: datanode2
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.1.3-java8
+    volumes:
+      - datanode2:/hadoop/dfs/data
+    env_file:
+      - ./hadoop-hive.env
+    environment:
+      SERVICE_PRECONDITION: "namenode:8020"
+      HDFS_CONF_dfs_datanode_hostname : "datanode2"
+      HDFS_CONF_dfs_client_use_datanode_hostname : "true"
+    ports:
+      - "50076:50075"
+      - "9866:9866"
+
+
+  historyserver:
+    image: bde2020/hadoop-historyserver:2.0.0-hadoop3.1.3-java8
+
+    volumes:
+      - hadoop_historyserver:/hadoop/yarn/timeline
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9866 resourcemanager:8088"
+    env_file:
+      - ./hadoop-hive.env
+    ports:
+      - 8188:8188
+
+
+  nodemanager:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.1.3-java8
+
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9866 resourcemanager:8088"
+    env_file:
+      - ./hadoop-hive.env
+    ports:
+      - 8042:8042
+
+
+  resourcemanager:
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.1.3-java8
+
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9866"
+    env_file:
+      - ./hadoop-hive.env
+    ports:
+      - 8088:8088
+    healthcheck:
+      disable: true
+
+
+
   hive-server:
+    container_name: hive-server
+    hostname: hive-server
     image: bde2020/hive:2.3.2-postgresql-metastore
     env_file:
       - ./hadoop-hive.env
@@ -30,22 +97,79 @@ services:
       SERVICE_PRECONDITION: "hive-metastore:9083"
     ports:
       - "10000:10000"
+
+
   hive-metastore:
+    container_name: hive-metastore
+    hostname: hive-metastore
     image: bde2020/hive:2.3.2-postgresql-metastore
     env_file:
       - ./hadoop-hive.env
     command: /opt/hive/bin/hive --service metastore
     environment:
-      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 hive-metastore-postgresql:5432"
+      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9866 hive-metastore-postgresql:5432"
     ports:
       - "9083:9083"
+
   hive-metastore-postgresql:
-    image: bde2020/hive-metastore-postgresql:2.3.0
-  presto-coordinator:
-    image: shawnzhu/prestodb:0.181
+      hostname: hive-metastore-postgresql
+      container_name: hive-metastore-postgresql
+      image: bde2020/hive-metastore-postgresql:2.3.0
+
+  # presto-coordinator:
+  #   image: shawnzhu/prestodb:0.181
+  #   ports:
+  #     - "8080:8080"
+  #     - "5432:5432"
+  
+
+  # superset:
+  #   image: apache/superset:latest
+  #   ports:
+  #     - "8088:8088"
+  #   environment:
+  #     - SUPERSET_SECRET_KEY=supersecretkey
+  #   depends_on:
+  #     - presto-coordinator
+
+
+  hue:
+    image: gethue/hue:latest
+    container_name: hue
+    hostname: hue
     ports:
-      - "8080:8080"
+      - "8888:8888"
+    environment:
+      - HUE_IGNORE_PASSWORD_SCRIPT_ERRORS=1
+    depends_on:
+      - hive-server
+      # - hive-metastore
+      - namenode
+      - datanode1
+      - datanode2
+    volumes:
+      - ./z-hue-overrides.ini:/usr/share/hue/desktop/conf/z-hue-overrides.ini
+
+  hue-postgres:
+    image: postgres:15
+    container_name: hue-postgres
+    environment:
+      POSTGRES_DB: hue
+      POSTGRES_USER: hue
+      POSTGRES_PASSWORD: hue
+    volumes:
+      - hue-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hue"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 
 volumes:
   namenode:
-  datanode:
+  datanode1:
+  datanode2:
+  hue-data:
+  hadoop_historyserver:  
+  hue-postgres:

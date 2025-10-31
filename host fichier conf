@@ -1,0 +1,5 @@
+127.0.0.1 datanode1
+127.0.0.1 datanode2
+127.0.0.1 namenode
+127.0.0.1 hive-server
+127.0.0.1 hive-metastore
