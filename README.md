@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # docker-hive
 
 une stack docker basé sur Vivekpawar07/Docker-hive, elle meme basé sur https://github.com/big-data-europe/docker-hadoop pour avoir un environnement de développement rapide avec hdfs hive et hue, les images docker sont normalement encore dispo sur dockerhub, mais je ne sais pas d'ou elles viennent ni si elle sont sécurisé
