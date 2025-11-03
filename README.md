@@ -8,7 +8,7 @@ utilisé durant un bloc projet Big Data pour l'année 4 d'ingenieur informatique
 
 peut avoir de nombreux bug attention pour l'utilisation en production
 
-un ficher .jar est présent pour connecter Talend( en l'occurence Talaxie 8, https://deilink.fr/#/download ) a Hive et HDFS avec un connection custom, il a été contruit dans le container namenode
+un ficher .jar est présent pour connecter Talend( en l'occurence Talaxie 8, https://deilink.fr/#/download ) a Hive et HDFS avec une connection custom, il a été contruit dans le container namenode
 
 un fichier host fichier conf est permet de ne pas utiliser localhost(dans talend)
 
